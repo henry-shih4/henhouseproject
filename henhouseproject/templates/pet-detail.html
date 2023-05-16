@@ -1,0 +1,58 @@
+{%extends 'main.html'%} {%block content%}
+
+<a class="p-4" href="{%url 'pet-list'%}">Back to Pet List</a>
+
+<div class="flex justify-center items-center gap-4">
+  <div>
+    <img
+      class="h-[240px] w-[200px] object-cover rounded-md"
+      src="{{pet.image.url}}"
+      alt="pet-image"
+    />
+  </div>
+  <div class="gap-2">
+    <h1>Name: {{pet.name}}</h1>
+    <p>Type: {{pet.animal_type}}, Breed: {{pet.breed_type}}</p>
+    <p>Age: {{pet.age}}</p>
+    <p>City: {{pet.city}}</p>
+    <p>Description: {{pet.description}}</p>
+    <p>Current Foster: {{pet.foster}}</p>
+  </div>
+</div>
+
+<form
+  class="flex flex-col justify-center items-center p-4 gap-4"
+  method="POST"
+  action="{%url 'pet-interested' pet.id%}"
+>
+  {{count}} person interested {% csrf_token %} {%if request.user in interested%}
+  <button
+    class="p-2 bg-blue-500 text-white"
+    type="submit"
+    name="pet_id"
+    value="{{pet.id}}"
+  >
+    Remove Interest
+  </button>
+  {%else%}
+  <button
+    class="p-2 bg-blue-500 text-white"
+    type="submit"
+    name="pet_id"
+    value="{{pet.id}}"
+  >
+    Express Interest
+  </button>
+  {%endif%}
+</form>
+
+<hr />
+<div class="flex justify-center items-center gap-4 p-4 text-white">
+  <button class="p-2 bg-blue-500">
+    <a href="{%url 'pet-update' pet.id %}">Update</a>
+  </button>
+  <button class="p-2 bg-blue-500">
+    <a href="{%url 'pet-delete' pet.id %}">Delete</a>
+  </button>
+</div>
+{%endblock%}

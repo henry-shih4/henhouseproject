@@ -1,0 +1,22 @@
+{%extends 'main.html'%}{%block content%} {%if page == 'create'%}
+<h1>Add a new pet!</h1>
+{%else%}
+<h1>Update an existing pet</h1>
+{%endif%}
+
+<form class="form" method="POST" action="" enctype="multipart/form-data">
+  {% csrf_token%} {%for field in form%}
+  <div>
+    <label for="">{{field.label}}</label>
+    {{field}}
+  </div>
+  {%endfor block%} {%if page == 'create'%}
+  <button type="submit">Add pet</button>
+  <a href="{%url 'pet-list' %}">Cancel</a>
+  {%else%}
+  <button type="submit">Update pet</button>
+  <a href="{%url 'pet-detail' pet.id%}">Cancel</a>
+  {%endif%}
+</form>
+
+{%endblock%}

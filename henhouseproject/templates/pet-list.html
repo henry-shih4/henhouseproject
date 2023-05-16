@@ -1,0 +1,42 @@
+{%extends 'main.html'%} {% block content %}
+
+<main
+  class="w-[80vw] m-auto bg-slate-100 flex flex-col justify-center items-center p-6"
+>
+  <h1 class="text-3xl">Our Pets</h1>
+
+  <form class="p-6" method="GET" action="{%url 'pet-list' %}">
+    <div class="flex gap-6">
+      <button class="p-2 bg-blue-500 text-white" name="q" value="">
+        All Pets
+      </button>
+      <button
+        class="p-2 bg-blue-500 text-white"
+        name="q"
+        value="{{request.user.id}}"
+      >
+        My Interested List
+      </button>
+    </div>
+  </form>
+  <section class="flex justify-center items-center flex-wrap gap-8 py-2 mb-4">
+    {%for pet in pets%}
+    <div class="">
+      <a href="{%url 'pet-detail' pet.id %}">
+        <img
+          class="h-[240px] w-[200px] object-cover object-center m-2 rounded-md"
+          src="{{pet.image.url}}"
+        />
+        <p class="text-xl text-center">{{pet.name}}</p>
+      </a>
+    </div>
+
+    {%endfor block%}
+  </section>
+
+  {%if user.is_authenticated%}
+  <button class="p-2 bg-blue-500 text-white">
+    <a href="{%url 'pet-create'%}">Add a pet</a>
+  </button>
+  {%endif%} {%endblock%}
+</main>
