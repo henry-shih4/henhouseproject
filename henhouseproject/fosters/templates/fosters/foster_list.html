@@ -1,0 +1,13 @@
+{%extends 'main.html'%} {% block content %}
+
+<h1>Our Fosters</h1>
+<div>
+  {%for foster in object_list%}
+  <div>{{foster.user.username}}: {{foster.user.email}}</div>
+  {%endfor%}
+</div>
+
+<button class="p-2 bg-blue-500 text-white">
+  <a href="{%url 'fosters:foster-create'%}">Add a foster</a>
+</button>
+{%endblock content%}

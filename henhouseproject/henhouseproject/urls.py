@@ -28,7 +28,9 @@ urlpatterns = [
     path('signup/', SignupView.as_view(), name = 'signup'),
     path('login/', LoginView.as_view(), name = 'login'),
     path('logout/',LogoutPage,name='logout'),
-    path('pets/', include('pets.urls'))
+    path('pets/', include('pets.urls')),
+    path('fosters/', include('fosters.urls', namespace='fosters'))
+
 ]
 
 

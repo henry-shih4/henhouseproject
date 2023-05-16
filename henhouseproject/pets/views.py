@@ -10,6 +10,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models  import Q
 from django.http import HttpResponse
 from django.views import generic
+from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -104,8 +105,9 @@ def PetCreate(request):
             pet = form.save(commit=False)
             pet.foster = request.user
             pet.save()
+            send_mail(subject="A pet has been created", message="Go to the web site to see the new pet.", from_email="test@test.com", recipient_list=["test2@test.com"])
             return redirect('pet-list')
-        
+
     context={'form':form, 'page':page}
     return render(request, 'pet-form.html', context)
 

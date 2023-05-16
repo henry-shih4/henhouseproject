@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pets',
     'henhouseproject',
+    'fosters',
 
     #third party apps
     'crispy_forms',
@@ -139,8 +140,12 @@ MEDIA_ROOT = BASE_DIR / 'static/images'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+AUTH_USER_MODEL = 'pets.User'
+
 LOGIN_REDIRECT_URL = '/pets'
 LOGIN_URL= '/login'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
