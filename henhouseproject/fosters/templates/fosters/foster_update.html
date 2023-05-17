@@ -1,0 +1,11 @@
+{%extends 'main.html'%} {% block content %}
+
+<a href="{%url 'fosters:foster-list'%}">Back to Foster List</a>
+<h1>Update Foster</h1>
+
+<form action="" method="post">
+  {% csrf_token %} {{form.as_p}}
+  <button class="p-2 bg-blue-500 text-white" type="submit">Update</button>
+</form>
+
+{%endblock content%}

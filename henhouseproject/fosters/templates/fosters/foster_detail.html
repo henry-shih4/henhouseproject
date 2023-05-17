@@ -1,0 +1,12 @@
+{%extends 'main.html'%} {%block content%} {{foster.user.username}}
+
+<div class="flex gap-6">
+  <button class="p-2 bg-blue-500 text-white" type="submit">
+    <a href="{%url 'fosters:foster-update' foster.id%}">Update</a>
+  </button>
+  <button class="p-2 bg-blue-500 text-white" type="submit">
+    <a href="{%url 'fosters:foster-delete' foster.id%}">Delete</a>
+  </button>
+</div>
+
+{%endblock content%}

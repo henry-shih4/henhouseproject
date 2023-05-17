@@ -3,7 +3,11 @@
 <h1>Our Fosters</h1>
 <div>
   {%for foster in object_list%}
-  <div>{{foster.user.username}}: {{foster.user.email}}</div>
+  <div>
+    <a href="{%url 'fosters:foster-detail' foster.id%}"
+      >{{foster.user.username}}</a
+    >: {{foster.user.email}}
+  </div>
   {%endfor%}
 </div>
 

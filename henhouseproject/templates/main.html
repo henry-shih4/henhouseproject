@@ -13,6 +13,7 @@
       <div class="text-4xl">Hen's House</div>
       <div><a href="{%url 'pet-list'%}">Pet List</a></div>
       {%if request.user.is_authenticated%}
+      <div><a href="{%url 'fosters:foster-list'%}">Foster List</a></div>
       <div>
         <div>Welcome, {{request.user.username}}</div>
         <a href="{%url 'logout'%}">Logout</a>

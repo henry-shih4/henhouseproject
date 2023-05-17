@@ -41,7 +41,7 @@ class Pet(models.Model):
 
 class Foster(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE) 
     def __str__(self):
         return self.user.email
     
