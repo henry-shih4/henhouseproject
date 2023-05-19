@@ -1,8 +1,11 @@
+import random
 from django.shortcuts import render, reverse
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from pets.models import Foster
 from .forms import FosterModelForm
+from django.core.mail import send_mail
+from .mixins import FosterAndLoginRequiredMixin
 
 # Create your views here.
 
@@ -15,7 +18,7 @@ class FosterListView(LoginRequiredMixin, generic.ListView):
     
 
 
-class FosterCreateView(LoginRequiredMixin, generic.CreateView):
+class FosterCreateView(FosterAndLoginRequiredMixin, generic.CreateView):
     template_name = "fosters/foster_create.html"
     form_class = FosterModelForm
 
@@ -23,9 +26,23 @@ class FosterCreateView(LoginRequiredMixin, generic.CreateView):
         return reverse("fosters:foster-list")
     
     def form_valid(self, form):
-        foster = form.save(commit=False)
-        foster.user_profile = self.request.user.userprofile
-        foster.save()
+        user = form.save(commit=False)
+        user.is_foster = True
+        user.set_password(f"{random.randint(0,100000)}")
+        user.save()
+        Foster.objects.create(
+            user=user,
+            user_profile=user.userprofile,
+        )
+        send_mail(
+            subject="You are invited to be an approved Foster for Hen's House",
+            message="Congratulations. You are approved as a Foster for Hen's House. Please come login to get started."
+            ,
+            from_email="admin@henshouse.com", 
+            recipient_list=[user.email]
+        )
+        # foster.user_profile = self.request.user.userprofile
+        # foster.save()
         return super(FosterCreateView, self).form_valid(form)
     
 
@@ -38,7 +55,7 @@ class FosterDetailView(LoginRequiredMixin, generic.DetailView):
 
 
 
-class FosterUpdateView(LoginRequiredMixin, generic.UpdateView):
+class FosterUpdateView(FosterAndLoginRequiredMixin, generic.UpdateView):
     template_name = "fosters/foster_update.html"
     form_class = FosterModelForm
 
@@ -49,7 +66,7 @@ class FosterUpdateView(LoginRequiredMixin, generic.UpdateView):
         return Foster.objects.all()
     
 
-class FosterDeleteView(LoginRequiredMixin, generic.DeleteView):
+class FosterDeleteView(FosterAndLoginRequiredMixin, generic.DeleteView):
     template_name= "fosters/foster_delete.html"
     context_object_name = "foster"
 

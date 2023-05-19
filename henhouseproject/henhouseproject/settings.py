@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     #third party apps
     'crispy_forms',
     'crispy_tailwind',
-  
+  "phonenumber_field",
+  'phonenumbers',
 ]
 
 MIDDLEWARE = [
@@ -142,7 +143,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'pets.User'
 
-LOGIN_REDIRECT_URL = '/pets'
+LOGIN_REDIRECT_URL = '/pets/'
 LOGIN_URL= '/login'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"

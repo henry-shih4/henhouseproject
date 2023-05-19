@@ -1,0 +1,17 @@
+{%extends 'main.html'%} {% block content %}
+
+<h1>Update Profile</h1>
+
+<form action="" method="post">
+  {% csrf_token %} {{form.as_p}}
+  <div class="p-4 gap-4 flex">
+    <button class="p-2 bg-blue-500 text-white" type="submit">
+      Confirm Update
+    </button>
+    <button class="p-2 bg-blue-500 text-white" type="submit">
+      <a href="{%url 'user-profile'%}">Cancel</a>
+    </button>
+  </div>
+</form>
+
+{%endblock content%}

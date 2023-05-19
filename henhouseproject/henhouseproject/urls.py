@@ -20,13 +20,19 @@ from django.urls import path, include
 from . import views
 from pets.views import LogoutPage, SignupView
 from django.conf.urls.static import static
-from django.contrib.auth.views import LoginView
+from .views import MyLoginView
+from django.contrib.auth.views import (PasswordResetView, 
+                                       PasswordResetDoneView,PasswordResetConfirmView, PasswordResetCompleteView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.Home, name='main'),
     path('signup/', SignupView.as_view(), name = 'signup'),
-    path('login/', LoginView.as_view(), name = 'login'),
+    path('password-reset/', PasswordResetView.as_view(), name='password-reset'),
+    path('password-reset-done/', PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('password-reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('password-reset-complete/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    path('login/', MyLoginView.as_view(), name = 'login'),
     path('logout/',LogoutPage,name='logout'),
     path('pets/', include('pets.urls')),
     path('fosters/', include('fosters.urls', namespace='fosters'))

@@ -1,16 +1,16 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
-from .models import Pet
-from .forms import PetForm
-from .models import User
+from .models import Pet, User, UserProfile
+from .forms import PetForm, ProfileModelForm, PetApplicationForm
 from django.contrib.auth import authenticate,login, logout
 from .forms import myUserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models  import Q
 from django.http import HttpResponse
 from django.views import generic
 from django.core.mail import send_mail
+from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
@@ -20,55 +20,6 @@ class SignupView(generic.CreateView):
 
     def get_success_url(self):
         return reverse('login')
-
-# def RegisterPage(request):
-#     page='register'
-#     form = myUserCreationForm()
-
-#     if request.method == 'POST':
-#         form = myUserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save(commit=False)
-#             user.username = user.username.lower()
-#             user.save()
-#             login(request,user)
-#             return redirect('pet-list')
-#         else:
-#             messages.error(request, 'An error occurred during registration')
-#     context = {'form':form, 'page':page}
-#     return render(request, 'login_register.html', context)
-
-def RegisterPage(request):
-    pass
-
-# def LoginPage(request):
-#     page = 'login'
-#     if (request.user.is_authenticated):
-#         return redirect('main')
-    
-#     if request.method == 'POST':
-#         username =request.POST.get('username').lower()
-#         password =request.POST.get('password')
-
-#         try:
-#             user = User.objects.get(username=username)
-#         except:
-#             messages.error(request, 'User does not exist')
-
-#         user = authenticate(request, username=username, password=password)       
-
-#         if user is not None:
-#             login(request,user)
-#             return redirect('main')
-#         else:
-#             messages.error(request, 'Username or password incorrect')
-    
-#     context = {'form':form,'page':page}
-#     return render(request, 'login_register.html', context)
-
-def LoginPage(request):
-    pass
-
 
 def LogoutPage(request):
     logout(request)
@@ -95,7 +46,17 @@ def PetDetail(request,pk):
     return render(request,'pet-detail.html', context)
 
 
+def check_user_able_to_see_page(function):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_foster:
+            return function(request, *args, **kwargs)
+        return HttpResponse('You are not allowed this action.')
+
+    return wrapper
+
+
 @login_required(login_url='/login')
+@check_user_able_to_see_page
 def PetCreate(request):
     page = 'create'
     form = PetForm()
@@ -153,3 +114,45 @@ def PetInterested(request,pk):
         else:
             pet.interested.add(request.user)
     return redirect('pet-detail', pk=pet.id)
+
+
+@login_required(login_url='/login')
+def PetApplication(request,pk):
+    user = request.user
+    profile = UserProfile.objects.get(id=user.id)
+    pet = Pet.objects.get(id=pk)
+    form = PetApplicationForm()
+    applicants = pet.applicants.all()
+    if request.user in applicants:
+        return HttpResponse('You have already applied for this pet')
+    if request.method == 'POST':
+        form = PetApplicationForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            pet.applicants.add(user)
+            pet.save()
+            return redirect('pet-detail', pk=pet.id)
+        else:
+            form = PetApplicationForm()
+    context = {'pet':pet, 'user':user, 'profile':profile, 'form':form}
+    return render(request,'pet-application.html',context)
+
+
+
+@login_required(login_url='/login')
+def ProfileView(request):
+    user = request.user
+    profile = UserProfile.objects.get(id=user.id)
+    context = {'user':user, 'profile':profile}
+    return render(request,'user-profile.html',context)
+
+
+class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
+    template_name = "update-profile.html"
+    form_class = ProfileModelForm
+
+    def get_success_url(self):
+        return reverse("user-profile")
+    
+    def get_queryset(self):
+        return UserProfile.objects.all()

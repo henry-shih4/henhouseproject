@@ -1,0 +1,23 @@
+{%extends 'main.html'%} {% block content %}
+<div class="p-6 flex flex-col gap-3">
+  {%if request.user.is_foster%}
+  <h1 class="text-2xl">Foster profile</h1>
+  {%else%}
+  <h1 class="text-2xl">User profile</h1>
+  {%endif%}
+  <div>Username: {{user.username}}</div>
+  <div>First Name: {{profile.first_name}}</div>
+  <div>Last Name: {{profile.last_name}}</div>
+  <div>Age: {{profile.age}}</div>
+  <div>Occupation: {{profile.occupation}}</div>
+  <hr />
+  <div>
+    Contact
+    <div>E-mail: {{user.email}}</div>
+    <div>Phone: {{profile.phone_number}}</div>
+  </div>
+  <a href="{%url 'update-profile' user.id%}"
+    ><button class="p-2 bg-blue-500 text-white">Update</button></a
+  >
+</div>
+{% endblock content %}

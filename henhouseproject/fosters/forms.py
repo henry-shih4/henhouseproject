@@ -1,9 +1,14 @@
 from django import forms
-from pets.models import Foster
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
+
+User = get_user_model()
 
 class FosterModelForm(forms.ModelForm):
     class Meta:
-        model = Foster
+        model = User
         fields = (
-            'user',
+            'first_name', 
+            'last_name'
         )
+
