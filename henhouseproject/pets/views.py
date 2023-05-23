@@ -41,8 +41,9 @@ def PetList(request):
 def PetDetail(request,pk):
     pet = Pet.objects.get(id=pk)
     interested = pet.interested.all()
-    count = interested.count()
-    context = {'pet':pet, 'interested':interested, 'count':count}
+    application_count = pet.applicants.count()
+    interested_count = interested.count()
+    context = {'pet':pet, 'interested':interested, 'interested_count':interested_count, 'application_count':application_count}
     return render(request,'pet-detail.html', context)
 
 
@@ -123,12 +124,16 @@ def PetApplication(request,pk):
     pet = Pet.objects.get(id=pk)
     form = PetApplicationForm()
     applicants = pet.applicants.all()
+
     if request.user in applicants:
         return HttpResponse('You have already applied for this pet')
     if request.method == 'POST':
-        form = PetApplicationForm(request.POST, instance=user)
+        form = PetApplicationForm(request.POST)
         if form.is_valid():
-            form.save()
+            application = form.save(commit=False)
+            application.user = user
+            application.pet = pet
+            application.save()
             pet.applicants.add(user)
             pet.save()
             return redirect('pet-detail', pk=pet.id)

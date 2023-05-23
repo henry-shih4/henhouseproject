@@ -25,7 +25,8 @@
   method="POST"
   action="{%url 'pet-interested' pet.id%}"
 >
-  {{count}} person interested {% csrf_token %} {%if request.user in interested%}
+  {{interested_count}} person interested {% csrf_token %} 
+  {%if request.user in interested%}
   <button
     class="p-2 bg-blue-500 text-white"
     type="submit"
@@ -45,6 +46,7 @@
   </button>
   {%endif%}
 </form>
+<div>{{application_count}} Application(s)</div>
 <a href="{%url 'pet-application' pet.id%}">Apply here</a>
 <hr />
 <div class="flex justify-center items-center gap-4 p-4 text-white">

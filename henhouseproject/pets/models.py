@@ -63,8 +63,8 @@ post_save.connect(post_user_created_signal, sender=User)
 
 class PetApplication(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True) 
-    pet = models.ForeignKey(Pet, on_delete=models.CASCADE) 
-    message = models.TextField(max_length=200)
+    pet = models.ForeignKey(Pet, on_delete=models.CASCADE,blank=True, null=True) 
+    message = models.TextField(max_length=200,blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return f'User: {self.user.id}, pet: {self.pet.id}'
