@@ -21,6 +21,13 @@ class SignupView(generic.CreateView):
     def get_success_url(self):
         return reverse('login')
 
+
+
+
+
+
+
+@login_required(login_url='/login')
 def LogoutPage(request):
     logout(request)
     return redirect('main')
@@ -120,7 +127,7 @@ def PetInterested(request,pk):
 @login_required(login_url='/login')
 def PetApplication(request,pk):
     user = request.user
-    profile = UserProfile.objects.get(id=user.id)
+    profile = UserProfile.objects.get(user=user)
     pet = Pet.objects.get(id=pk)
     form = PetApplicationForm()
     applicants = pet.applicants.all()
@@ -147,7 +154,8 @@ def PetApplication(request,pk):
 @login_required(login_url='/login')
 def ProfileView(request):
     user = request.user
-    profile = UserProfile.objects.get(id=user.id)
+    print(user.id)
+    profile = UserProfile.objects.get(user=user)
     context = {'user':user, 'profile':profile}
     return render(request,'user-profile.html',context)
 

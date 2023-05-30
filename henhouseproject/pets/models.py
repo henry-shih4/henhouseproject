@@ -8,7 +8,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class User(AbstractUser):
     is_foster = models.BooleanField(default=False)
-
+    email = models.EmailField(unique=True)
 
 
 ANIMAL_CHOICES = (
@@ -37,8 +37,8 @@ class Pet(models.Model):
     city = models.CharField(max_length=30, default='Unknown')
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(null=True, default="default.jpg")
-    interested = models.ManyToManyField(User, related_name='interested_pets', null = True,blank = True)
-    applicants = models.ManyToManyField(User, related_name='applicants_pets', null=True,blank = True)
+    interested = models.ManyToManyField(User, related_name='interested_pets',blank = True)
+    applicants = models.ManyToManyField(User, related_name='applicants_pets',blank = True)
     foster = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank = True)
 
     def __str__(self):
@@ -52,7 +52,6 @@ class Foster(models.Model):
     def __str__(self):
         return self.user.email
     
-
 
 def post_user_created_signal(sender, instance, created, **kwargs):
     print(instance, created)

@@ -1,26 +1,38 @@
-{%extends 'main.html'%}{% load tailwind_filters %}{%block content%} 
-{%if page == 'create'%}
-<h1>Add a new pet!</h1>
-{%else%}
-<h1>Update an existing pet</h1>
-{%endif%}
-
-<form action="" method="POST">
-  {% csrf_token %} {{form|crispy}} <button type="Submit">Add pet</button>
-</form>
-{% comment %}
-<form class="form" method="POST" action="" enctype="multipart/form-data">
-  {% csrf_token%} {%for field in form%}
-  <div>
-    <label for="">{{field.label}}</label>
-    {{field}}
-  </div>
-  {%endfor block%} {%if page == 'create'%}
-  <button type="submit">Add pet</button>
-  <a href="{%url 'pet-list' %}">Cancel</a>
+{%extends 'main.html'%}{% load tailwind_filters %}{%block content%}
+<div class="w-[100%] flex flex-col justify-center items-center">
+  {%if page == 'create'%}
+  <h1>Add a new pet!</h1>
   {%else%}
-  <button type="submit">Update pet</button>
-  <a href="{%url 'pet-detail' pet.id%}">Cancel</a>
+  <h1>Update an existing pet</h1>
   {%endif%}
-</form>
-{% endcomment %} {%endblock%}
+  <form
+    class="flex flex-col justify-center items-center w-[50%]"
+    action=""
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    {% csrf_token %} {{form|crispy}} {%if page == 'create'%}
+    <button class="p-2 text-white bg-blue-500" type="submit">Add pet</button>
+    <a href="{%url 'pet-list' %}">Cancel</a>
+    {%else%}
+    <button class="p-2 text-white bg-blue-500" type="submit">Update pet</button>
+    <a href="{%url 'pet-detail' pet.id%}">Cancel</a>
+    {%endif%}
+  </form>
+  {% comment %}
+  <form class="form" method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token%} {%for field in form%}
+    <div>
+      <label for="">{{field.label}}</label>
+      {{field}}
+    </div>
+    {%endfor block%} {%if page == 'create'%}
+    <button type="submit">Add pet</button>
+    <a href="{%url 'pet-list' %}">Cancel</a>
+    {%else%}
+    <button type="submit">Update pet</button>
+    <a href="{%url 'pet-detail' pet.id%}">Cancel</a>
+    {%endif%}
+  </form>
+  {% endcomment %} {%endblock%}
+</div>

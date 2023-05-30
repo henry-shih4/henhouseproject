@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from pets.models import Foster
 from .forms import FosterModelForm
 from django.core.mail import send_mail
-from .mixins import FosterAndLoginRequiredMixin
+from .mixins import FosterAndLoginRequiredMixin, SuperUserRequiredMixin
 
 # Create your views here.
 
@@ -18,7 +18,7 @@ class FosterListView(LoginRequiredMixin, generic.ListView):
     
 
 
-class FosterCreateView(FosterAndLoginRequiredMixin, generic.CreateView):
+class FosterCreateView(SuperUserRequiredMixin, generic.CreateView):
     template_name = "fosters/foster_create.html"
     form_class = FosterModelForm
 

@@ -1,8 +1,33 @@
 {%extends 'main.html'%} {% load tailwind_filters %} {%block content%}
-<form method="POST">
-  {% csrf_token %} {{form|crispy}}
-  <button type="submit">Login</button>
-</form>
-<a href="{%url 'signup'%}">Not a user yet? Sign Up</a>
-<a href="{%url 'password-reset'%}">Reset Password</a>
+<div class="flex justify-center items-center">
+  <div>
+    {%if messages%} {%for message in messages%}
+    <p>{{message}}</p>
+    {%endfor%} {%endif%}
+  </div>
+  <form method="POST" class="flex flex-col w-[50%]">
+    {% csrf_token %} {{form|crispy}}
+    <div>
+      <label for="room_name">Email</label>
+      <input
+        id="email"
+        name="email"
+        type="text"
+        placeholder="e.g. hen@gmail.com"
+      />
+    </div>
+    <div class="form__group">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+      />
+    </div>
+    <button type="submit" class="p-2 text-white bg-blue-500">Login</button>
+    <a href="{%url 'signup'%}">Not a user yet? Sign Up</a>
+    <a href="{%url 'password-reset'%}">Reset Password</a>
+  </form>
+</div>
 {%endblock content%}
