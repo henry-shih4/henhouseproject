@@ -9,7 +9,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 class User(AbstractUser):
     is_foster = models.BooleanField(default=False)
     email = models.EmailField(unique=True)
-
+    
+    def __str__(self):
+        return self.email
 
 ANIMAL_CHOICES = (
     ("Dog", "Dog"),

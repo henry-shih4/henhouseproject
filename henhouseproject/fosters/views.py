@@ -28,6 +28,7 @@ class FosterCreateView(SuperUserRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         user = form.save(commit=False)
         user.is_foster = True
+        user.username = f'{user.first_name}{user.last_name}'
         user.set_password(f"{random.randint(0,100000)}")
         user.save()
         Foster.objects.create(
