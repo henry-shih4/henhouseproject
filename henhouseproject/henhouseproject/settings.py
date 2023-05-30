@@ -98,7 +98,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'henhouseproject.wsgi.application'
+WSGI_APPLICATION = 'henhouseproject.wsgi.app'
 
 
 # Database
