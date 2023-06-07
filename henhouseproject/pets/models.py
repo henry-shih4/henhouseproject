@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 
@@ -9,7 +10,8 @@ from phonenumber_field.modelfields import PhoneNumberField
 class User(AbstractUser):
     is_foster = models.BooleanField(default=False)
     email = models.EmailField(unique=True)
-    
+
+
     def __str__(self):
         return self.email
 
@@ -26,7 +28,7 @@ class UserProfile(models.Model):
     occupation = models.CharField(max_length=40, blank=True)
     age = models.IntegerField(default = 0, blank = True)
     phone_number = PhoneNumberField(blank=True)
-    
+
     def __str__(self):
         return self.user.username
 
@@ -51,6 +53,7 @@ class Pet(models.Model):
 class Foster(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE) 
+    
     def __str__(self):
         return self.user.email
     

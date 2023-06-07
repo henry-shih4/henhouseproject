@@ -1,8 +1,8 @@
 import random
-from django.shortcuts import render, reverse
+from django.shortcuts import render, reverse, redirect
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
-from pets.models import Foster
+from pets.models import Foster, User
 from .forms import FosterModelForm
 from django.core.mail import send_mail
 from .mixins import FosterAndLoginRequiredMixin, SuperUserRequiredMixin
@@ -29,7 +29,8 @@ class FosterCreateView(SuperUserRequiredMixin, generic.CreateView):
         user = form.save(commit=False)
         user.is_foster = True
         user.username = f'{user.first_name}{user.last_name}'
-        user.set_password(f"{random.randint(0,100000)}")
+        random_password = random.randint(0,100000)
+        user.set_password(f"{random_password}")
         user.save()
         Foster.objects.create(
             user=user,
@@ -37,7 +38,7 @@ class FosterCreateView(SuperUserRequiredMixin, generic.CreateView):
         )
         send_mail(
             subject="You are invited to be an approved Foster for Hen's House",
-            message="Congratulations. You are approved as a Foster for Hen's House. Please come login to get started."
+            message=f"Congratulations. You are approved as a Foster for Hen's House. Please come login to get started. Your temporary password is {random_password}. You can reset your password if you want to on the login page by clicking reset password."
             ,
             from_email="admin@henshouse.com", 
             recipient_list=[user.email]
@@ -67,12 +68,23 @@ class FosterUpdateView(FosterAndLoginRequiredMixin, generic.UpdateView):
         return Foster.objects.all()
     
 
-class FosterDeleteView(FosterAndLoginRequiredMixin, generic.DeleteView):
-    template_name= "fosters/foster_delete.html"
-    context_object_name = "foster"
+# class FosterDeleteView(SuperUserRequiredMixin, generic.DeleteView):
+#     template_name= "fosters/foster_delete.html"
+#     context_object_name = "user"
 
-    def get_queryset(self):
-        return Foster.objects.all()
+#     def get_queryset(self):
+#         return User.objects.all()
     
-    def get_success_url(self):
-        return reverse("fosters:foster-list")
+#     def get_success_url(self):
+#         return reverse("fosters:foster-list")
+    
+
+
+def FosterDelete(request,pk):
+    foster = Foster.objects.get(id=pk)
+    user = foster.user
+     
+    if request.method == 'POST':
+        user.delete()
+        return redirect('fosters:foster-list')
+    return render(request, 'fosters/foster_delete.html', {'obj':user})

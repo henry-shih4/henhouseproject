@@ -74,7 +74,7 @@ def PetCreate(request):
             pet = form.save(commit=False)
             pet.foster = request.user
             pet.save()
-            send_mail(subject="A pet has been created", message="Go to the web site to see the new pet.", from_email="test@test.com", recipient_list=["test2@test.com"])
+            # send_mail(subject="A pet has been created", message="Go to the web site to see the new pet.", from_email="test@test.com", recipient_list=["test2@test.com"])
             return redirect('pet-list')
 
     context={'form':form, 'page':page}
