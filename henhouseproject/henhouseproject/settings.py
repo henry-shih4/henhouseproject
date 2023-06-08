@@ -159,7 +159,7 @@ STATICFILES_DIRS = [
 
 ##user uploaded content
 
-MEDIA_ROOT = BASE_DIR / 'static/images'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'images')
 
 if not DEBUG: STATICFILES_DIRS.append(MEDIA_ROOT)
 
