@@ -38,7 +38,7 @@ class FosterCreateView(SuperUserRequiredMixin, generic.CreateView):
         )
         send_mail(
             subject="You are invited to be an approved Foster for Hen's House",
-            message=f"Congratulations. You are approved as a Foster for Hen's House. Please come login to get started. Your temporary password is {random_password}. You can reset your password if you want to on the login page by clicking reset password."
+            message=f"Congratulations. You are approved as a Foster for Hen's House. Please come login at https://henhouseproject.vercel.app/ to get started. Your temporary password is {random_password}. You can reset your password if you want to in your user profile page by clicking reset password."
             ,
             from_email="admin@henshouse.com", 
             recipient_list=[user.email]
