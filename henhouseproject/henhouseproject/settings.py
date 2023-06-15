@@ -199,6 +199,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # DEFAULT_FILE_STORAGE='storages.backends.s3boto3.S3StaticStorage'
 # STATICFILES_STORAGE='storages.backends.s3boto3.S3StaticStorage'
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 MEDIA_URLS ='/media/'
